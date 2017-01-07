@@ -7,15 +7,41 @@ var makeHashTable = function() {
     retrieve: function(key) {
       // create a hash value 
       var place=hashFn(key , max);
-      // call the value by its hashed value
-      return _storage[place];
+      // iterate over keys
+      for(var i = 0; i<makeHashTable._storage[place] ; i++){
+        // check if they match with the key 
+        if(makeHashTable._storage[place][i][0]===key){
+          // call the value by its hashed value
+          return makeHashTable._storage[place][i][1];
+        }
+      }
+      return 'key not found';
     },
 
     insert: function(key, value) {
       // create a hash value 
       var place=hashFn(key, max);
-      // place the needed in value in the hashed value  
-      _storage[place]=value;
+      // check if this value is created before
+      if(makeHashTable._storage[place]===undefined){
+        makeHashTable._storage[place]=[];
+        // place the needed in value in the hashed value  
+        makeHashTable._storage[place].push([key,value]);
+      }
+      // falg to know if the same key is already used
+      var flag=true; 
+      //iterate over keys
+      for(var i = 0; i<makeHashTable._storage[place] ; i++){
+        // check if its created already and want to overwrite  
+        if(makeHashTable._storage[place][i][0]===key){
+          // call the value by its hashed value
+          makeHashTable._storage[place][i][1]=value;
+          flag=false;
+        }
+      } 
+      if(flag){  // if the key not founded 
+        // place it in another place
+        makeHashTable._storage[place].push([key,value]);
+      }
    }
  };
 }
